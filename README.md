@@ -20,4 +20,4 @@ is also built by GitHub Actions.
 
 ## License
 
-MIT. Based on microDurability by pajic (MIT).
+MIT. Based on microDurability by pajic (MIT); the icon is from microDurability.

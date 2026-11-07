@@ -11,6 +11,7 @@
     "issues": "https://github.com/Hiveko75/microdurability-armor-bars/issues"
   },
   "license": "MIT",
+  "icon": "assets/microdurability-armor-bars/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": ["io.github.hiveko.armorbars.ArmorBars"]
