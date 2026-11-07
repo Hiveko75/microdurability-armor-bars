@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "microdurability-armor-bars",
+  "version": "${version}",
+  "name": "microDurability Armor Bars",
+  "description": "Tiny armor durability bars above the hotbar. A stripped-down version of microDurability by pajic: armor bars only, no low-durability warning, no config dependency.",
+  "authors": ["Hiveko"],
+  "contributors": ["pajic (microDurability)"],
+  "contact": {
+    "sources": "https://github.com/Hiveko75/microdurability-armor-bars",
+    "issues": "https://github.com/Hiveko75/microdurability-armor-bars/issues"
+  },
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["io.github.hiveko.armorbars.ArmorBars"]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.2",
+    "fabric-api": "*",
+    "minecraft": ">=26.3-",
+    "java": ">=25"
+  },
+  "breaks": {
+    "microdurability": "*"
+  }
+}
