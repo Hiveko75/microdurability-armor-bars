@@ -1,5 +1,9 @@
 package io.github.hiveko.armorbars;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
@@ -26,6 +30,34 @@ public class ArmorBars implements ClientModInitializer {
     private static final int BAR_WIDTH = 13;
     private static final int BAR_HEIGHT = 2;
     private static final int BAR_SPACING = 3;
+
+    /**
+     * "HUD hidden" (F1) check. 26.1.x keeps it in Options.hideGui, 26.2 and newer in
+     * Gui.hud.isHidden(). Minecraft 26.x is not obfuscated, so the one that exists is looked up
+     * by name once; this keeps one jar for all versions.
+     */
+    private static final MethodHandle OPTIONS_HIDE_GUI;
+    private static final MethodHandle GUI_HUD;
+    private static final MethodHandle HUD_IS_HIDDEN;
+
+    static {
+        MethodHandles.Lookup lookup = MethodHandles.publicLookup();
+        MethodHandle hideGui = null, hud = null, isHidden = null;
+        try {
+            hideGui = lookup.findGetter(net.minecraft.client.Options.class, "hideGui", boolean.class);
+        } catch (ReflectiveOperationException e) {
+            try {
+                Class<?> hudClass = Class.forName("net.minecraft.client.gui.Hud");
+                hud = lookup.findGetter(net.minecraft.client.gui.Gui.class, "hud", hudClass);
+                isHidden = lookup.findVirtual(hudClass, "isHidden", MethodType.methodType(boolean.class));
+            } catch (ReflectiveOperationException e2) {
+                // neither found: the bars are simply also shown with F1
+            }
+        }
+        OPTIONS_HIDE_GUI = hideGui;
+        GUI_HUD = hud;
+        HUD_IS_HIDDEN = isHidden;
+    }
 
     /** Also show bars for armor that has not been damaged yet (full green bar). */
     private static final boolean SHOW_UNDAMAGED_ARMOR = true;
@@ -59,7 +91,20 @@ public class ArmorBars implements ClientModInitializer {
 
     /** Hidden in creative/spectator (no health bar) and when the HUD is hidden (F1). */
     private static boolean isStatusAreaHidden(Minecraft mc) {
-        return mc.gameMode == null || !mc.gameMode.canHurtPlayer() || mc.gui.hud.isHidden();
+        return mc.gameMode == null || !mc.gameMode.canHurtPlayer() || isHudHidden(mc);
+    }
+
+    private static boolean isHudHidden(Minecraft mc) {
+        try {
+            if (OPTIONS_HIDE_GUI != null) {
+                return (boolean) OPTIONS_HIDE_GUI.invoke(mc.options);
+            }
+            if (GUI_HUD != null) {
+                return (boolean) HUD_IS_HIDDEN.invoke(GUI_HUD.invoke(mc.gui));
+            }
+        } catch (Throwable ignored) {
+        }
+        return false;
     }
 
     private static void renderBar(GuiGraphicsExtractor graphics, ItemStack stack, int x, int y) {
