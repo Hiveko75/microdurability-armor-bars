@@ -39,7 +39,7 @@ jobs:
           cat > notes.md <<'NOTES'
           Tiny armor durability bars above the hotbar, a stripped-down version of [microDurability](https://modrinth.com/mod/microdurability) by pajic: armor bars only, no low-durability warning.
 
-          - **New:** Minecraft **26.2** support. One jar for 26.2 and 26.3 (CI compiles it against both and checks the bytecode is identical).
+          - **New:** Minecraft **26.1.2** support. One jar for 26.1.2, 26.2 and 26.3 (CI compiles it against all three and checks the bytecode is identical). Hiding the HUD with F1 also hides the bars on every version.
 
           Requires Fabric API. Client-side only. MIT license.
           NOTES
