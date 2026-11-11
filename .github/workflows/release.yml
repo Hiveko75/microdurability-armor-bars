@@ -28,7 +28,8 @@ jobs:
           chmod +x ./gradlew
           mkdir dist
           ./gradlew build --stacktrace
-          cp build/libs/*.jar dist/ && rm -f dist/*-sources.jar
+          ./gradlew -p mc1.21.11 build --stacktrace
+          cp build/libs/*.jar mc1.21.11/build/libs/*.jar dist/ && rm -f dist/*-sources.jar
           ls -l dist
       - name: Create release
         env:
@@ -39,7 +40,12 @@ jobs:
           cat > notes.md <<'NOTES'
           Tiny armor durability bars above the hotbar, a stripped-down version of [microDurability](https://modrinth.com/mod/microdurability) by pajic: armor bars only, no low-durability warning.
 
-          - **New:** Minecraft **26.1.2** support. One jar for 26.1.2, 26.2 and 26.3 (CI compiles it against all three and checks the bytecode is identical). Hiding the HUD with F1 also hides the bars on every version.
+          - **New:** Minecraft **1.21.11** support (separate jar).
+
+          | File | Minecraft |
+          |---|---|
+          | `microdurability-armor-bars-*.jar` | 26.1.2, 26.2, 26.3 |
+          | `microdurability-armor-bars-*+mc1.21.11.jar` | 1.21.11 |
 
           Requires Fabric API. Client-side only. MIT license.
           NOTES

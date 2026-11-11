@@ -1,0 +1,46 @@
+plugins {
+    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+}
+
+// Minecraft 1.21.11 build: its own ArmorBars.java (platform/mc1.21.11), the shared resources.
+// Build with: ./gradlew -p mc1.21.11 build
+def root = file('..')
+def rootProps = new Properties()
+new File(root, 'gradle.properties').withInputStream { rootProps.load(it) }
+
+version = "${rootProps.mod_version}+mc1.21.11"
+group = rootProps.maven_group
+
+base {
+    archivesName = rootProps.archives_base_name
+}
+
+sourceSets.main {
+    java.srcDirs = [new File(root, 'platform/mc1.21.11/java')]
+    resources.srcDirs = [new File(root, 'src/main/resources')]
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+processResources {
+    def props = [version: project.version, minecraft_range: project.minecraft_range,
+                 loader_min: project.loader_min, java_version: '21']
+    inputs.properties props
+    filesMatching("fabric.mod.json") { expand props }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = "UTF-8"
+    it.options.release = 21
+}
+
+jar {
+    from(new File(root, 'LICENSE')) {
+        rename { "${it}_${rootProps.archives_base_name}" }
+    }
+}
