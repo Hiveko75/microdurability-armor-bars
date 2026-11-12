@@ -60,9 +60,7 @@ jobs:
         run: |
           chmod +x ./gradlew
           ./gradlew build --stacktrace
-          ./gradlew -p mc1.21.11 build --stacktrace
-          rm -f build/libs/*-sources.jar mc1.21.11/build/libs/*-sources.jar
-          cp mc1.21.11/build/libs/*+mc1.21.11.jar build/libs/
+          rm -f build/libs/*-sources.jar
           ls -l build/libs
       - uses: actions/upload-artifact@v4
         with:

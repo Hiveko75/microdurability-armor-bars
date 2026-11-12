@@ -17,10 +17,10 @@
     "client": ["io.github.hiveko.armorbars.ArmorBars"]
   },
   "depends": {
-    "fabricloader": ">=${loader_min}",
+    "fabricloader": ">=0.19.2",
     "fabric-api": "*",
     "minecraft": "${minecraft_range}",
-    "java": ">=${java_version}"
+    "java": ">=25"
   },
   "breaks": {
     "microdurability": "*"

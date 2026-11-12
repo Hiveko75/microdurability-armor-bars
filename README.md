@@ -1,7 +1,7 @@
 # microDurability Armor Bars
 
 Tiny durability bars for your worn armor, drawn just above the hotbar (boots at the bottom,
-helmet at the top), for Minecraft 1.21.11 and 26.1.2+ (Fabric).
+helmet at the top), for Minecraft 26.1.2+ (Fabric).
 
 A stripped-down version of **microDurability** by pajic: it keeps only the armor bars, with the
 same position and look, and drops the low-durability warning and the config screen, so it needs
