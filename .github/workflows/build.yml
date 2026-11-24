@@ -36,6 +36,7 @@ jobs:
         with:
           name: javap-${{ matrix.mc }}
           path: javap/
+          retention-days: 14
 
   compare:
     needs: check
@@ -66,3 +67,4 @@ jobs:
         with:
           name: microdurability-armor-bars
           path: build/libs/*.jar
+          retention-days: 14
