@@ -12,6 +12,8 @@ on:
 
 permissions:
   contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   release:
@@ -30,6 +32,12 @@ jobs:
           ./gradlew build --stacktrace
           cp build/libs/*.jar dist/ && rm -f dist/*-sources.jar
           ls -l dist
+      - name: Attest build provenance
+        if: github.event_name != 'pull_request'
+        uses: actions/attest@v4
+        with:
+          subject-path: 'dist/*.jar'
+
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
